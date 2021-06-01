@@ -1,36 +1,48 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
-var app = express();
+const cors = require('cors');
+const helmet = require('helmet');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+const { requestLogger, errorLogger, consoleLogger } = require('./middlewares/logger');
+
+const error = require('./middlewares/error');
+const NotFound = require('./errors/NotFound');
+
+require('dotenv').config();
+
+const {
+  PORT = 3000,
+  NODE_ENV,
+  CORS_UI_ADDRESS = 'http://localhost:3001',
+} = process.env;
+
+const app = express();
+
+app.use(cors({
+  origin: CORS_UI_ADDRESS,
+  credentials: true,
+}));
+app.use(helmet());
+
+app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(requestLogger);
+if (NODE_ENV !== 'production') {
+  app.use(consoleLogger);
+}
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(() => {
+  throw new NotFound();
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(errorLogger);
+app.use(error);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
 });
-
-module.exports = app;
