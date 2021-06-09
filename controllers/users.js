@@ -68,10 +68,12 @@ module.exports.getCurrent = (req, res, next) => {
 module.exports.updateCurrent = (req, res, next) => {
   const {
     name,
+    email,
   } = req.body;
 
   User.findByIdAndUpdate(req.user._id, {
     name,
+    email,
   }, {
     new: true,
     runValidators: true,
@@ -86,6 +88,8 @@ module.exports.updateCurrent = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequest();
+      } else if (err.name === 'MongoError' && err.codeName === 'DuplicateKey') {
+        throw new Conflict();
       } else {
         throw err;
       }
