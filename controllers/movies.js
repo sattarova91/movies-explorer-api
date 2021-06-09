@@ -1,8 +1,6 @@
 const Movie = require('../models/movie');
 const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
-const Unauthorized = require('../errors/Unauthorized');
-const Conflict = require('../errors/Conflict');
 const Forbidden = require('../errors/Forbidden');
 
 module.exports.getAll = (req, res, next) => {
