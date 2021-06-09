@@ -24,6 +24,7 @@ const {
   PORT = 3000,
   NODE_ENV,
   CORS_UI_ADDRESS = 'http://localhost:3001',
+  MONGO_ADDRESS = 'mongodb://localhost:27017/movieexplorerdb'
 } = process.env;
 
 const app = express();
@@ -78,7 +79,7 @@ app.use(errorLogger);
 app.use(celebrate.errors());
 app.use(error);
 
-mongoose.connect('mongodb://localhost:27017/movieexplorerdb', {
+mongoose.connect(MONGO_ADDRESS, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
