@@ -68,7 +68,7 @@ app.use('/signup', postOrNotFound, celebrate.celebrate({
 
 app.use(auth);
 app.use('/users', require('./routes/users'));
-
+app.use('/movies', require('./routes/movies'));
 
 app.use(() => {
   throw new NotFound();
