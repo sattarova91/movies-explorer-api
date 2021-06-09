@@ -50,14 +50,14 @@ function postOrNotFound(req, res, next) {
   }
 }
 
-// app.use('/signout', postOrNotFound, logout);
+app.use('/signout', postOrNotFound, logout);
 
-// app.use('/signin', postOrNotFound, celebrate.celebrate({
-//   body: celebrate.Joi.object().keys({
-//     email: celebrate.Joi.string().required().email(),
-//     password: celebrate.Joi.string().required().min(8),
-//   }),
-// }), login);
+app.use('/signin', postOrNotFound, celebrate.celebrate({
+  body: celebrate.Joi.object().keys({
+    email: celebrate.Joi.string().required().email(),
+    password: celebrate.Joi.string().required().min(8),
+  }),
+}), login);
 app.use('/signup', postOrNotFound, celebrate.celebrate({
   body: celebrate.Joi.object().keys({
     name: celebrate.Joi.string().required().min(2).max(30),
@@ -75,6 +75,7 @@ app.use(() => {
 });
 
 app.use(errorLogger);
+app.use(celebrate.errors());
 app.use(error);
 
 mongoose.connect('mongodb://localhost:27017/movieexplorerdb', {
