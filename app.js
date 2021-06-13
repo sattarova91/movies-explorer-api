@@ -24,7 +24,7 @@ const {
   PORT = 3000,
   NODE_ENV,
   CORS_UI_ADDRESS = 'http://localhost:3001',
-  MONGO_ADDRESS = 'mongodb://localhost:27017/movieexplorerdb'
+  MONGO_ADDRESS = 'mongodb://localhost:27017/movieexplorerdb',
 } = process.env;
 
 const app = express();
