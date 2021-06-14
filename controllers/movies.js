@@ -61,7 +61,7 @@ module.exports.del = (req, res, next) => {
       } else if (String(movie.owner) !== req.user._id) {
         throw new Forbidden();
       } else {
-        Movie.findOneAndDelete({
+        return Movie.findOneAndDelete({
           _id: req.params.movieId,
           owner: req.user._id,
         })
