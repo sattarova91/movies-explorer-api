@@ -2,6 +2,7 @@ const router = require('express').Router();
 const {
   celebrate,
   Joi,
+  Segments
 } = require('celebrate');
 const {
   create,
@@ -29,6 +30,10 @@ router.post('/', celebrate({
   }),
 }), create);
 
-router.delete('/:movieId', del);
+router.delete('/:movieId', celebrate({
+  [Segments.PARAMS]: {
+    movieId: Joi.string().hex().length(24).required()
+  }
+}), del);
 
 module.exports = router;
