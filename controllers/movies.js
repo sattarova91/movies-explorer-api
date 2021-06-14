@@ -61,13 +61,9 @@ module.exports.del = (req, res, next) => {
       } else if (String(movie.owner) !== req.user._id) {
         throw new Forbidden();
       } else {
-        return Movie.findOneAndDelete({
-          _id: req.params.movieId,
-          owner: req.user._id,
-        })
-          .then((dbmovie) => {
-            res.send(dbmovie);
-          });
+        return movie.remove().then((dbmovie) => {
+          res.send(dbmovie);
+        });
       }
     })
     .catch((err) => {
